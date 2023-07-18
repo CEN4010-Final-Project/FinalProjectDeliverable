@@ -29,9 +29,9 @@ const favoriteInfoSchema = new mongoose.Schema(
 //Set favorite model
 const Favorite = mongoose.model("favorite", favoriteInfoSchema);
 
-//Functions---------------------------------------------------------------> NEED TO TEST WITH POSTMAN
+//Functions
 app.post("/api/favorite", async (req, res) => {
-    const favorite = new Favorite ({
+    const favorite = new Favorite ({ //Get rid of _id?
         user_id : req.body.user_id,
         recipe : req.body.recipe
       });
@@ -49,6 +49,7 @@ app.delete("/api/favorite/:recipe", async (req, res) => {
       const favorite = await Favorite.findOneAndDelete({ user_id: user_id, recipe: recipe });
       if (favorite) {
         res.send("Deleted Favorite");
+        console.log("Deleted Favorite");
       } else {
         res.status(404).json({ message: "Favorite not found" });
       }
@@ -66,7 +67,8 @@ app.get("/api/favorite/:recipe", async (req, res) => {
     try {
       const favorite = await Favorite.findOne({ user_id: user_id, recipe: recipe });
       if (favorite) {
-        res.send(`Viewing ${favorite} from favorites`)
+        res.send(`Viewing ${favorite.recipe} from favorites`)
+        console.log(`Viewing ${favorite.recipe} from favorites`);
       } else {
         res.status(404).json({ message: "Favorite not found" });
       }
@@ -79,10 +81,12 @@ app.get("/api/favorite/:recipe", async (req, res) => {
 });
 
 app.get("/api/favorites", async (req, res) => {
-    try {
+  var user_id = req.body.user_id;
+      try {
         const favorite = await Favorite.find({ user_id: user_id });
         if (favorite) {
-          res.send(`Viewing ${favorite} from favorites`)
+          res.send(`Viewing ${favorite}`)
+          console.log("Viewing favorites");
         } else {
           res.status(404).json({ message: "Favorites not found" });
         }

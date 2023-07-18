@@ -13,7 +13,7 @@ client.connect(err => {
     console.log('Error connecting to database:', err);
   } else {
     console.log('Successfully connected to database!');
-    const collection = client.db("test").collection("test");
+    const collection = client.db("test").collection("favorites");
     collection.findOne({}, (err, result) => {
       if (err) {
         console.log('Error querying database:', err);
